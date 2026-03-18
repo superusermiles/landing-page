@@ -205,42 +205,60 @@
   <!-- Testimonials Section -->
   <section class="testimonials" id="testimonials">
     <div class="container">
-      <span class="section-tag">Client Love</span>
-      <h2 class="section-title">Testimonials</h2>
-      <p class="section-sub">Don't take our word for it.</p>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p class="testimonial-text">"SuperMiles completely transformed our online presence. Our new site loads in under 2 seconds and conversions are up 40%."</p>
-          <div class="testimonial-author">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&q=80&fit=crop&crop=face" alt="Sarah Chen" class="author-avatar" />
-            <div>
-              <strong>Sarah Chen</strong>
-              <span>CEO, Luxe Realty</span>
-            </div>
+      <div class="testimonials-shell reveal">
+        <div class="testimonials-header">
+          <div>
+            <span class="section-tag">Client Love</span>
+            <h2 class="section-title">Testimonials</h2>
+            <p class="section-sub">Browse what clients say about the strategy, speed, and outcomes behind every launch.</p>
+          </div>
+          <div class="testimonial-controls" aria-label="Testimonial slider controls">
+            <button class="testimonial-btn" id="testimonialPrev" type="button" aria-label="Show previous testimonial">←</button>
+            <button class="testimonial-btn" id="testimonialNext" type="button" aria-label="Show next testimonial">→</button>
           </div>
         </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p class="testimonial-text">"They actually listened to what we needed instead of pushing a cookie-cutter solution. The result was beyond our expectations."</p>
-          <div class="testimonial-author">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&q=80&fit=crop&crop=face" alt="James Patel" class="author-avatar" />
-            <div>
-              <strong>James Patel</strong>
-              <span>Founder, Bloom &amp; Co</span>
+        <div class="testimonial-slider" id="testimonialSlider" tabindex="0" aria-live="polite">
+          <article class="testimonial-slide is-active">
+            <div class="testimonial-quote-mark">“</div>
+            <div class="stars">★★★★★</div>
+            <p class="testimonial-text">"SuperMiles completely transformed our online presence. Our new site loads in under 2 seconds and conversions are up 40%."</p>
+            <div class="testimonial-author">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&q=80&fit=crop&crop=face" alt="Sarah Chen" class="author-avatar" />
+              <div>
+                <strong>Sarah Chen</strong>
+                <span>CEO, Luxe Realty</span>
+              </div>
             </div>
-          </div>
+          </article>
+          <article class="testimonial-slide">
+            <div class="testimonial-quote-mark">“</div>
+            <div class="stars">★★★★★</div>
+            <p class="testimonial-text">"They actually listened to what we needed instead of pushing a cookie-cutter solution. The result was beyond our expectations."</p>
+            <div class="testimonial-author">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&q=80&fit=crop&crop=face" alt="James Patel" class="author-avatar" />
+              <div>
+                <strong>James Patel</strong>
+                <span>Founder, Bloom &amp; Co</span>
+              </div>
+            </div>
+          </article>
+          <article class="testimonial-slide">
+            <div class="testimonial-quote-mark">“</div>
+            <div class="stars">★★★★★</div>
+            <p class="testimonial-text">"From brief to launch in 3 weeks. Incredible team, incredible results. Our bounce rate dropped by 25% immediately."</p>
+            <div class="testimonial-author">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&q=80&fit=crop&crop=face" alt="Emma Torres" class="author-avatar" />
+              <div>
+                <strong>Emma Torres</strong>
+                <span>Marketing Director, FitTrack Pro</span>
+              </div>
+            </div>
+          </article>
         </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p class="testimonial-text">"From brief to launch in 3 weeks. Incredible team, incredible results. Our bounce rate dropped by 25% immediately."</p>
-          <div class="testimonial-author">
-            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&q=80&fit=crop&crop=face" alt="Emma Torres" class="author-avatar" />
-            <div>
-              <strong>Emma Torres</strong>
-              <span>Marketing Director, FitTrack Pro</span>
-            </div>
-          </div>
+        <div class="testimonial-dots" id="testimonialDots" aria-label="Testimonial navigation">
+          <button class="testimonial-dot is-active" type="button" aria-label="Show testimonial 1"></button>
+          <button class="testimonial-dot" type="button" aria-label="Show testimonial 2"></button>
+          <button class="testimonial-dot" type="button" aria-label="Show testimonial 3"></button>
         </div>
       </div>
     </div>

@@ -51,13 +51,13 @@ if (processCards.length > 0 && processTitle && processText) {
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .timeline-item, .timeline-note'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('timeline-track'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
