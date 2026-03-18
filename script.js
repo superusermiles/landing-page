@@ -51,13 +51,13 @@ if (processCards.length > 0 && processTitle && processText) {
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .hero-proof, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .timeline-step, .timeline-panel'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('timeline'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -107,6 +107,86 @@ const statObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 statNums.forEach(el => statObserver.observe(el));
 
+// ===== Results Timeline Interactivity =====
+const timelineSteps = document.querySelectorAll('.timeline-step');
+const timelineTopline = document.getElementById('timelineTopline');
+const timelineHeading = document.getElementById('timelineHeading');
+const timelineDescription = document.getElementById('timelineDescription');
+const timelineList = document.getElementById('timelineList');
+
+if (timelineSteps.length > 0 && timelineTopline && timelineHeading && timelineDescription && timelineList) {
+  const timelineData = [
+    {
+      topline: 'Week 1 foundation',
+      heading: 'Strategy Sprint',
+      description: 'We align on goals, audience, offer positioning, sitemap priorities, and the conversion actions your website needs to drive.',
+      items: [
+        'Kickoff workshop with clear success metrics',
+        'Messaging and page-priority recommendations',
+        'Action plan that removes guesswork before design starts'
+      ]
+    },
+    {
+      topline: 'Week 2 direction',
+      heading: 'Design Direction',
+      description: 'You get a focused creative route with wireframes, visual references, and conversion-led layouts that make the final build easier to approve.',
+      items: [
+        'Homepage and key section concepts presented clearly',
+        'Fast review loop with practical feedback checkpoints',
+        'Refined direction ready for development without surprises'
+      ]
+    },
+    {
+      topline: 'Week 3 momentum',
+      heading: 'Build & Refine',
+      description: 'We develop the approved direction into a responsive site, tune the experience across devices, and polish the handoff details that lift trust.',
+      items: [
+        'Responsive front-end build with content integrated',
+        'Performance, accessibility, and UX refinements',
+        'Collaborative review rounds before launch approval'
+      ]
+    },
+    {
+      topline: 'Week 4 launch',
+      heading: 'Launch & Learn',
+      description: 'Once the site goes live, we help verify tracking, review early engagement signals, and spot the first improvements that can increase leads.',
+      items: [
+        'Launch checklist and live QA support',
+        'Analytics and conversion tracking confirmation',
+        'Early insights to guide your first post-launch wins'
+      ]
+    }
+  ];
+
+  const updateTimeline = (index) => {
+    const data = timelineData[index];
+    if (!data) return;
+
+    timelineSteps.forEach((step, stepIndex) => {
+      const isActive = stepIndex === index;
+      step.classList.toggle('is-active', isActive);
+      step.setAttribute('aria-pressed', String(isActive));
+    });
+
+    const panel = document.getElementById('timelinePanel');
+    if (panel) panel.classList.add('is-switching');
+
+    setTimeout(() => {
+      timelineTopline.textContent = data.topline;
+      timelineHeading.textContent = data.heading;
+      timelineDescription.textContent = data.description;
+      timelineList.innerHTML = data.items.map(item => `<li>${item}</li>`).join('');
+      if (panel) panel.classList.remove('is-switching');
+    }, 160);
+  };
+
+  timelineSteps.forEach((step, index) => {
+    step.addEventListener('click', () => updateTimeline(index));
+    step.addEventListener('mouseenter', () => updateTimeline(index));
+    step.addEventListener('focus', () => updateTimeline(index));
+  });
+}
+
 // ===== Results Section Animation =====
 const chartBars = document.querySelectorAll('.chart-bar');
 if (chartBars.length > 0) {
@@ -142,21 +222,5 @@ if (form) {
       btn.disabled = false;
       form.reset();
     }, 3000);
-  });
-}
-
-// ===== Back to top button =====
-const backToTop = document.getElementById('backToTop');
-
-if (backToTop) {
-  const toggleBackToTop = () => {
-    backToTop.classList.toggle('visible', window.scrollY > 500);
-  };
-
-  window.addEventListener('scroll', toggleBackToTop);
-  toggleBackToTop();
-
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
