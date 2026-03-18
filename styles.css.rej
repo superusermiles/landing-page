@@ -1,0 +1,11 @@
+--- styles.css
++++ styles.css
+@@ -227,7 +227,7 @@
+ 
+ /* ===== Testimonials ===== */
+ .testimonials {
+-  background: linear-gradient(180deg, #ffffff 0%, #f6f4ff 100%);
++  background: linear-gradient(180deg, #ffffff 0%, #f6f7ff 100%);
+ }
+ .testimonials-shell {
+   background: #fff;
