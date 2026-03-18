@@ -49,164 +49,113 @@ if (processCards.length > 0 && processTitle && processText) {
   });
 }
 
-// ===== Testimonial Slider =====
-const testimonialSlider = document.getElementById('testimonialSlider');
-const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-const testimonialPrev = document.getElementById('testimonialPrev');
-const testimonialNext = document.getElementById('testimonialNext');
-const testimonialDots = document.querySelectorAll('.testimonial-dot');
-let testimonialIndex = 0;
-let testimonialInterval;
-
-function showTestimonial(index) {
-  if (!testimonialSlides.length) return;
-
-  testimonialIndex = (index + testimonialSlides.length) % testimonialSlides.length;
-
-  testimonialSlides.forEach((slide, slideIndex) => {
-    const isActive = slideIndex === testimonialIndex;
-    slide.classList.toggle('is-active', isActive);
-    slide.setAttribute('aria-hidden', String(!isActive));
-  });
-
-  testimonialDots.forEach((dot, dotIndex) => {
-    const isActive = dotIndex === testimonialIndex;
-    dot.classList.toggle('is-active', isActive);
-    dot.setAttribute('aria-pressed', String(isActive));
-  });
-}
-
-function startTestimonialAutoplay() {
-  if (testimonialSlides.length < 2) return;
-  clearInterval(testimonialInterval);
-  testimonialInterval = setInterval(() => {
-    showTestimonial(testimonialIndex + 1);
-  }, 5000);
-}
-
-if (testimonialSlides.length) {
-  showTestimonial(0);
-  startTestimonialAutoplay();
-
-  testimonialPrev?.addEventListener('click', () => {
-    showTestimonial(testimonialIndex - 1);
-    startTestimonialAutoplay();
-  });
-
-  testimonialNext?.addEventListener('click', () => {
-    showTestimonial(testimonialIndex + 1);
-    startTestimonialAutoplay();
-  });
-
-  testimonialDots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      showTestimonial(index);
-      startTestimonialAutoplay();
-    });
-  });
-
-  testimonialSlider?.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      showTestimonial(testimonialIndex - 1);
-      startTestimonialAutoplay();
-    }
-
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      showTestimonial(testimonialIndex + 1);
-      startTestimonialAutoplay();
-    }
-  });
-
-  testimonialSlider?.addEventListener('mouseenter', () => clearInterval(testimonialInterval));
-  testimonialSlider?.addEventListener('mouseleave', startTestimonialAutoplay);
-  testimonialSlider?.addEventListener('focusin', () => clearInterval(testimonialInterval));
-  testimonialSlider?.addEventListener('focusout', startTestimonialAutoplay);
-}
-
-// ===== Results timeline =====
+// ===== Results Timeline Interactivity =====
 const timelineSteps = document.querySelectorAll('.timeline-step');
 const timelineTopline = document.getElementById('timelineTopline');
 const timelineHeading = document.getElementById('timelineHeading');
 const timelineDescription = document.getElementById('timelineDescription');
 const timelineList = document.getElementById('timelineList');
 
-if (timelineSteps.length && timelineTopline && timelineHeading && timelineDescription && timelineList) {
+if (timelineSteps.length > 0 && timelineTopline && timelineHeading && timelineDescription && timelineList) {
   const timelineData = [
     {
       topline: 'Week 1 foundation',
       heading: 'Strategy Sprint',
       description: 'We align on goals, audience, offer positioning, sitemap priorities, and the conversion actions your website needs to drive.',
-      items: [
+      bullets: [
         'Kickoff workshop with clear success metrics',
         'Messaging and page-priority recommendations',
         'Action plan that removes guesswork before design starts'
       ]
     },
     {
-      topline: 'Week 2 clarity',
+      topline: 'Week 2 design clarity',
       heading: 'Design Direction',
-      description: 'We shape the homepage and key journeys into a polished direction so you can see how the site will look, feel, and convert before development begins.',
-      items: [
-        'High-impact homepage direction and visual system',
-        'Fast feedback checkpoints to keep approvals moving',
-        'Clear handoff into build with no ambiguity'
+      description: 'We turn strategy into a visual system with page concepts, hierarchy, and polished direction your team can react to quickly.',
+      bullets: [
+        'Homepage and key page design concepts',
+        'Brand-aligned typography and interface styling',
+        'Fast review loop to keep momentum high'
       ]
     },
     {
-      topline: 'Week 3 momentum',
+      topline: 'Week 3 production push',
       heading: 'Build & Refine',
-      description: 'Approved designs become a fast, responsive experience with content refinement, QA passes, and the kind of polish that makes the launch feel premium.',
-      items: [
-        'Responsive front-end build across key breakpoints',
-        'Performance, accessibility, and conversion-focused QA',
-        'Final refinements based on stakeholder review'
+      description: 'Approved designs become a responsive marketing site with smooth interactions, performance checks, and content refinement as we go.',
+      bullets: [
+        'Responsive front-end build across core pages',
+        'Content implementation and on-page polish',
+        'QA passes for performance, clarity, and usability'
       ]
     },
     {
-      topline: 'Week 4 rollout',
+      topline: 'Week 4 go-live momentum',
       heading: 'Launch & Learn',
-      description: 'We launch with tracking, final checks, and a practical plan for what to improve next so the website keeps performing after go-live.',
-      items: [
-        'Launch support with analytics and conversion tracking',
-        'Post-launch check-in to review early signals',
-        'Prioritized next-step recommendations for growth'
+      description: 'We launch confidently, monitor the rollout, and give you the insights and next-step recommendations to keep improving results.',
+      bullets: [
+        'Launch support and final preflight checklist',
+        'Analytics, form, and conversion tracking review',
+        'Post-launch recommendations for the next growth sprint'
       ]
     }
   ];
 
-  const updateTimeline = (index) => {
-    const activeIndex = Number(index);
-    const data = timelineData[activeIndex];
+  const setTimelineStep = (index) => {
+    const data = timelineData[index];
     if (!data) return;
 
     timelineSteps.forEach((step, stepIndex) => {
-      const isActive = stepIndex === activeIndex;
+      const isActive = stepIndex === index;
       step.classList.toggle('is-active', isActive);
       step.setAttribute('aria-pressed', String(isActive));
     });
 
-    timelineTopline.textContent = data.topline;
-    timelineHeading.textContent = data.heading;
-    timelineDescription.textContent = data.description;
-    timelineList.innerHTML = data.items.map(item => `<li>${item}</li>`).join('');
+    timelineTopline.style.opacity = '0';
+    timelineHeading.style.opacity = '0';
+    timelineDescription.style.opacity = '0';
+    timelineList.style.opacity = '0';
+
+    setTimeout(() => {
+      timelineTopline.textContent = data.topline;
+      timelineHeading.textContent = data.heading;
+      timelineDescription.textContent = data.description;
+      timelineList.innerHTML = data.bullets.map(item => `<li>${item}</li>`).join('');
+
+      timelineTopline.style.opacity = '1';
+      timelineHeading.style.opacity = '1';
+      timelineDescription.style.opacity = '1';
+      timelineList.style.opacity = '1';
+    }, 160);
   };
 
   timelineSteps.forEach((step, index) => {
-    step.addEventListener('click', () => updateTimeline(index));
+    step.addEventListener('click', () => setTimelineStep(index));
+    step.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        const nextIndex = (index + 1) % timelineSteps.length;
+        timelineSteps[nextIndex].focus();
+        setTimelineStep(nextIndex);
+      }
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const prevIndex = (index - 1 + timelineSteps.length) % timelineSteps.length;
+        timelineSteps[prevIndex].focus();
+        setTimelineStep(prevIndex);
+      }
+    });
   });
 }
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .testimonial-slide, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .testimonials-shell, .results-shell, .cta-band'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .timeline-step, .timeline-panel'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('testimonial-slider') || parent.classList.contains('timeline'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('timeline'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -256,16 +205,23 @@ const statObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 statNums.forEach(el => statObserver.observe(el));
 
-// ===== Floating CTA visibility =====
-const floatingCta = document.getElementById('floatingCta');
-if (floatingCta) {
-  const toggleFloatingCta = () => {
-    const shouldShow = window.scrollY > 500;
-    floatingCta.classList.toggle('is-visible', shouldShow);
-  };
+// ===== Results Section Animation =====
+const chartBars = document.querySelectorAll('.chart-bar');
+if (chartBars.length > 0) {
+  const barsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        chartBars.forEach(bar => {
+          const targetHeight = bar.getAttribute('data-height');
+          bar.style.height = `${targetHeight}%`;
+        });
+        barsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.35 });
 
-  toggleFloatingCta();
-  window.addEventListener('scroll', toggleFloatingCta);
+  const chart = document.querySelector('.results-chart');
+  if (chart) barsObserver.observe(chart);
 }
 
 // ===== Contact form feedback =====
