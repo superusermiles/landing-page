@@ -51,13 +51,13 @@ if (processCards.length > 0 && processTitle && processText) {
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .testimonial-slide, .testimonial-controls, .testimonial-dots'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('testimonial-slider') || parent.classList.contains('testimonial-dots'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -126,82 +126,6 @@ if (chartBars.length > 0) {
   if (chart) barsObserver.observe(chart);
 }
 
-// ===== Testimonial Slider =====
-const testimonialSlider = document.getElementById('testimonialSlider');
-const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-const testimonialDots = document.querySelectorAll('.testimonial-dot');
-const testimonialPrev = document.getElementById('testimonialPrev');
-const testimonialNext = document.getElementById('testimonialNext');
-let testimonialIndex = 0;
-let testimonialInterval;
-
-if (testimonialSlides.length > 0 && testimonialSlider && testimonialPrev && testimonialNext) {
-  const showTestimonial = (index) => {
-    testimonialSlides.forEach((slide, slideIndex) => {
-      slide.classList.toggle('is-active', slideIndex === index);
-    });
-
-    testimonialDots.forEach((dot, dotIndex) => {
-      dot.classList.toggle('is-active', dotIndex === index);
-      dot.setAttribute('aria-current', dotIndex === index ? 'true' : 'false');
-    });
-
-    testimonialIndex = index;
-  };
-
-  const nextTestimonial = () => {
-    showTestimonial((testimonialIndex + 1) % testimonialSlides.length);
-  };
-
-  const prevTestimonial = () => {
-    showTestimonial((testimonialIndex - 1 + testimonialSlides.length) % testimonialSlides.length);
-  };
-
-  const startTestimonialAutoplay = () => {
-    testimonialInterval = setInterval(nextTestimonial, 5000);
-  };
-
-  const resetTestimonialAutoplay = () => {
-    clearInterval(testimonialInterval);
-    startTestimonialAutoplay();
-  };
-
-  testimonialNext.addEventListener('click', () => {
-    nextTestimonial();
-    resetTestimonialAutoplay();
-  });
-
-  testimonialPrev.addEventListener('click', () => {
-    prevTestimonial();
-    resetTestimonialAutoplay();
-  });
-
-  testimonialDots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      showTestimonial(index);
-      resetTestimonialAutoplay();
-    });
-  });
-
-  testimonialSlider.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
-      nextTestimonial();
-      resetTestimonialAutoplay();
-    }
-
-    if (event.key === 'ArrowLeft') {
-      prevTestimonial();
-      resetTestimonialAutoplay();
-    }
-  });
-
-  testimonialSlider.addEventListener('mouseenter', () => clearInterval(testimonialInterval));
-  testimonialSlider.addEventListener('mouseleave', startTestimonialAutoplay);
-
-  showTestimonial(0);
-  startTestimonialAutoplay();
-}
-
 // ===== Contact form feedback =====
 const form = document.getElementById('contactForm');
 if (form) {
@@ -218,5 +142,21 @@ if (form) {
       btn.disabled = false;
       form.reset();
     }, 3000);
+  });
+}
+
+// ===== Back to top button =====
+const backToTop = document.getElementById('backToTop');
+
+if (backToTop) {
+  const toggleBackToTop = () => {
+    backToTop.classList.toggle('visible', window.scrollY > 500);
+  };
+
+  window.addEventListener('scroll', toggleBackToTop);
+  toggleBackToTop();
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }

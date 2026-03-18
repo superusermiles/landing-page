@@ -360,69 +360,6 @@
     </div>
   </section>
 
-  <section class="cta-banner" aria-labelledby="ctaBannerTitle">
-    <div class="container">
-      <div class="cta-banner-card reveal">
-        <div class="cta-banner-copy">
-          <span class="section-tag">Fast Track</span>
-          <h2 class="section-title" id="ctaBannerTitle">Have a launch date already circled?</h2>
-          <p>Get a focused website sprint with clear milestones, weekly check-ins, and a launch plan built around your deadline.</p>
-        </div>
-        <div class="cta-banner-actions">
-          <a href="#contact" class="btn btn-primary">Book Your Sprint</a>
-          <span class="cta-banner-note">Typical reply: within 24 hours</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="roi-calculator" id="roi-calculator">
-    <div class="container">
-      <div class="roi-shell reveal">
-        <div class="roi-copy">
-          <span class="section-tag">Quick ROI Snapshot</span>
-          <h2 class="section-title">See what a higher-converting website could be worth</h2>
-          <p class="section-sub">This simple calculator helps visitors estimate the upside of improving conversion rate before they even book a call.</p>
-        </div>
-        <div class="roi-grid">
-          <form class="roi-form" id="roiForm">
-            <div class="form-group">
-              <label for="monthlyVisitors">Monthly website visitors</label>
-              <input type="number" id="monthlyVisitors" min="0" step="100" value="5000">
-            </div>
-            <div class="form-group">
-              <label for="currentConversion">Current conversion rate (%)</label>
-              <input type="number" id="currentConversion" min="0" max="100" step="0.1" value="1.8">
-            </div>
-            <div class="form-group">
-              <label for="projectedConversion">Improved conversion rate (%)</label>
-              <input type="number" id="projectedConversion" min="0" max="100" step="0.1" value="2.6">
-            </div>
-            <div class="form-group">
-              <label for="leadValue">Average value per lead ($)</label>
-              <input type="number" id="leadValue" min="0" step="50" value="350">
-            </div>
-          </form>
-          <div class="roi-results" id="roiResults" aria-live="polite">
-            <div class="roi-result-card">
-              <span class="roi-label">Current monthly leads</span>
-              <strong id="currentLeads">90</strong>
-            </div>
-            <div class="roi-result-card roi-result-card--featured">
-              <span class="roi-label">Additional monthly revenue potential</span>
-              <strong id="revenueLift">$14,000</strong>
-              <p id="roiSummary">That’s roughly 40 extra leads each month if your site converts just a little better.</p>
-            </div>
-            <div class="roi-result-card">
-              <span class="roi-label">Projected monthly leads</span>
-              <strong id="projectedLeads">130</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
@@ -440,10 +377,9 @@
     </div>
   </footer>
 
-  <a href="#contact" class="floating-cta" id="floatingCta" aria-label="Start your project">
-    <span class="floating-cta-label">Ready to launch?</span>
-    <span class="floating-cta-action">Start your project</span>
-  </a>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    ↑
+  </button>
 
   <script src="script.js"></script>
 </body>
