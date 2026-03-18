@@ -51,13 +51,13 @@ if (processCards.length > 0 && processTitle && processText) {
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .results-shell, .cta-band'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .hero-proof-card, .proof-item'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('hero-proof-grid'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
