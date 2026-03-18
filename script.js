@@ -51,13 +51,13 @@ if (processCards.length > 0 && processTitle && processText) {
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -106,6 +106,25 @@ const statObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 statNums.forEach(el => statObserver.observe(el));
+
+// ===== Results Section Animation =====
+const chartBars = document.querySelectorAll('.chart-bar');
+if (chartBars.length > 0) {
+  const barsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        chartBars.forEach(bar => {
+          const targetHeight = bar.getAttribute('data-height');
+          bar.style.height = `${targetHeight}%`;
+        });
+        barsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  const chart = document.querySelector('.results-chart');
+  if (chart) barsObserver.observe(chart);
+}
 
 // ===== Contact form feedback =====
 const form = document.getElementById('contactForm');
