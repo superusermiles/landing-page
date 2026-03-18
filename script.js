@@ -14,55 +14,16 @@ navLinks.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => navLinks.classList.remove('open'));
 });
 
-// ===== Process Section Interactivity =====
-const processCards = document.querySelectorAll('.process-card');
-const processTitle = document.getElementById('processTitle');
-const processText = document.getElementById('processText');
-
-if (processCards.length > 0 && processTitle && processText) {
-  // Process data
-  const processData = {
-    1: { title: 'Discover', text: 'We learn about your business, audience, goals, and current blockers so the new site solves the right problems.' },
-    2: { title: 'Design', text: 'We shape the structure, visuals, and messaging into a polished direction tailored to your brand and funnel.' },
-    3: { title: 'Build', text: 'We turn approved designs into a fast, responsive experience with clean development and careful QA.' },
-    4: { title: 'Launch', text: 'We deploy, optimize, and support the rollout so your site performs from day one and keeps improving after go-live.' }
-  };
-
-  // Add click handlers to process cards
-  processCards.forEach(card => {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => {
-      const step = card.getAttribute('data-step');
-      const data = processData[step];
-      
-      // Update active state
-      processCards.forEach(c => c.classList.remove('is-active'));
-      card.classList.add('is-active');
-      
-      // Update spotlight with animation
-      processTitle.style.opacity = '0';
-      processText.style.opacity = '0';
-      
-      setTimeout(() => {
-        processTitle.textContent = data.title;
-        processText.textContent = data.text;
-        processTitle.style.opacity = '1';
-        processText.style.opacity = '1';
-      }, 150);
-    });
-  });
-}
-
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub'
+  '.service-card, .portfolio-card, .process-card, .process-spotlight, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub'
 );
 
-revealElements.forEach((el, i) => {
+revealElements.forEach((el) => {
   el.classList.add('reveal');
   // Stagger cards within grids
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('process-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
