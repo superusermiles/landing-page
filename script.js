@@ -147,15 +147,51 @@ if (timelineSteps.length > 0 && timelineTopline && timelineHeading && timelineDe
   });
 }
 
+// ===== ROI Calculator =====
+const roiForm = document.getElementById('roiForm');
+const monthlyVisitorsInput = document.getElementById('monthlyVisitors');
+const currentRateInput = document.getElementById('currentRate');
+const avgValueInput = document.getElementById('avgValue');
+const newLeadsOutput = document.getElementById('roiNewLeads');
+const revenueOutput = document.getElementById('roiRevenue');
+const upliftOutput = document.getElementById('roiUplift');
+
+if (roiForm && monthlyVisitorsInput && currentRateInput && avgValueInput && newLeadsOutput && revenueOutput && upliftOutput) {
+  const formatNumber = (value) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
+  const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+
+  const updateRoi = () => {
+    const visitors = Number(monthlyVisitorsInput.value) || 0;
+    const currentRate = (Number(currentRateInput.value) || 0) / 100;
+    const avgValue = Number(avgValueInput.value) || 0;
+    const improvedRate = currentRate * 1.35;
+    const currentLeads = visitors * currentRate;
+    const improvedLeads = visitors * improvedRate;
+    const extraLeads = Math.max(0, improvedLeads - currentLeads);
+    const monthlyRevenueLift = extraLeads * avgValue;
+    const upliftPercent = currentRate > 0 ? ((improvedRate - currentRate) / currentRate) * 100 : 0;
+
+    newLeadsOutput.textContent = `+${formatNumber(Math.round(extraLeads))}`;
+    revenueOutput.textContent = formatCurrency(Math.round(monthlyRevenueLift));
+    upliftOutput.textContent = `+${formatNumber(Math.round(upliftPercent))}%`;
+  };
+
+  ['input', 'change'].forEach(eventName => {
+    roiForm.addEventListener(eventName, updateRoi);
+  });
+
+  updateRoi();
+}
+
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .timeline-step, .timeline-panel'
+  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-overview, .result-card, .results-chart, .chart-bar, .results-list li, .timeline-step, .timeline-panel, .roi-shell, .roi-input, .roi-card'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('timeline'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('results-metrics') || parent.classList.contains('results-chart') || parent.classList.contains('results-list') || parent.classList.contains('timeline') || parent.classList.contains('roi-inputs') || parent.classList.contains('roi-results'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
