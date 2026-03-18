@@ -49,15 +49,133 @@ if (processCards.length > 0 && processTitle && processText) {
   });
 }
 
+// ===== Testimonial Slider =====
+const testimonialSlider = document.getElementById('testimonialSlider');
+const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+const testimonialPrev = document.getElementById('testimonialPrev');
+const testimonialNext = document.getElementById('testimonialNext');
+const testimonialDots = document.querySelectorAll('.testimonial-dot');
+let testimonialIndex = 0;
+let testimonialInterval;
+
+function showTestimonial(index) {
+  if (!testimonialSlides.length) return;
+
+  testimonialIndex = (index + testimonialSlides.length) % testimonialSlides.length;
+
+  testimonialSlides.forEach((slide, slideIndex) => {
+    const isActive = slideIndex === testimonialIndex;
+    slide.classList.toggle('is-active', isActive);
+    slide.setAttribute('aria-hidden', String(!isActive));
+  });
+
+  testimonialDots.forEach((dot, dotIndex) => {
+    const isActive = dotIndex === testimonialIndex;
+    dot.classList.toggle('is-active', isActive);
+    dot.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
+function startTestimonialAutoplay() {
+  if (testimonialSlides.length < 2) return;
+  clearInterval(testimonialInterval);
+  testimonialInterval = setInterval(() => {
+    showTestimonial(testimonialIndex + 1);
+  }, 5000);
+}
+
+if (testimonialSlides.length) {
+  showTestimonial(0);
+  startTestimonialAutoplay();
+
+  testimonialPrev?.addEventListener('click', () => {
+    showTestimonial(testimonialIndex - 1);
+    startTestimonialAutoplay();
+  });
+
+  testimonialNext?.addEventListener('click', () => {
+    showTestimonial(testimonialIndex + 1);
+    startTestimonialAutoplay();
+  });
+
+  testimonialDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      showTestimonial(index);
+      startTestimonialAutoplay();
+    });
+  });
+
+  testimonialSlider?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showTestimonial(testimonialIndex - 1);
+      startTestimonialAutoplay();
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showTestimonial(testimonialIndex + 1);
+      startTestimonialAutoplay();
+    }
+  });
+
+  testimonialSlider?.addEventListener('mouseenter', () => clearInterval(testimonialInterval));
+  testimonialSlider?.addEventListener('mouseleave', startTestimonialAutoplay);
+  testimonialSlider?.addEventListener('focusin', () => clearInterval(testimonialInterval));
+  testimonialSlider?.addEventListener('focusout', startTestimonialAutoplay);
+}
+
+// ===== Before / After estimator =====
+const estimatorRange = document.getElementById('estimatorRange');
+const estimatorValue = document.getElementById('estimatorValue');
+const estimatorDelta = document.getElementById('estimatorDelta');
+const estimatorMonths = document.querySelectorAll('.estimator-month');
+const estimatorRevenueBar = document.getElementById('estimatorRevenueBar');
+const estimatorLeadsBar = document.getElementById('estimatorLeadsBar');
+const estimatorRevenueCaption = document.getElementById('estimatorRevenueCaption');
+const estimatorLeadsCaption = document.getElementById('estimatorLeadsCaption');
+
+if (estimatorRange && estimatorValue && estimatorDelta && estimatorMonths.length) {
+  const formatCurrency = (value) => `$${Math.round(value).toLocaleString()}`;
+  const formatLeads = (value) => `${Math.round(value).toLocaleString()} leads`;
+
+  const updateEstimator = (value) => {
+    const monthlyBudget = Number(value);
+    const beforeRevenue = monthlyBudget * 4.2;
+    const afterRevenue = monthlyBudget * 6.4;
+    const beforeLeads = monthlyBudget / 120;
+    const afterLeads = monthlyBudget / 82;
+    const lift = ((afterRevenue - beforeRevenue) / beforeRevenue) * 100;
+
+    estimatorValue.textContent = formatCurrency(monthlyBudget);
+    estimatorDelta.textContent = `Projected +${Math.round(lift)}% revenue lift`;
+    estimatorRevenueBar.style.setProperty('--before', `${beforeRevenue}`);
+    estimatorRevenueBar.style.setProperty('--after', `${afterRevenue}`);
+    estimatorLeadsBar.style.setProperty('--before', `${beforeLeads}`);
+    estimatorLeadsBar.style.setProperty('--after', `${afterLeads}`);
+    estimatorRevenueCaption.textContent = `${formatCurrency(beforeRevenue)} → ${formatCurrency(afterRevenue)} projected monthly revenue`;
+    estimatorLeadsCaption.textContent = `${formatLeads(beforeLeads)} → ${formatLeads(afterLeads)} qualified enquiries`;
+
+    estimatorMonths.forEach((month, index) => {
+      const growth = 1 + ((index + 1) * 0.08);
+      const projectedRevenue = beforeRevenue * growth;
+      month.querySelector('.estimator-month-value').textContent = formatCurrency(projectedRevenue);
+    });
+  };
+
+  updateEstimator(estimatorRange.value);
+  estimatorRange.addEventListener('input', (event) => updateEstimator(event.target.value));
+}
+
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .results-shell, .timeline-step, .timeline-panel, .timeline-list li'
+  '.service-card, .portfolio-card, .testimonial-card, .testimonial-slide, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .testimonials-shell, .results-shell, .cta-band, .outcome-estimator-shell'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('timeline') || parent.classList.contains('timeline-list'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('testimonial-slider') || parent.classList.contains('estimator-months'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -106,119 +224,6 @@ const statObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 statNums.forEach(el => statObserver.observe(el));
-
-// ===== Results timeline interactivity =====
-const timelineSteps = document.querySelectorAll('.timeline-step');
-const timelineTopline = document.getElementById('timelineTopline');
-const timelineHeading = document.getElementById('timelineHeading');
-const timelineDescription = document.getElementById('timelineDescription');
-const timelineList = document.getElementById('timelineList');
-
-if (timelineSteps.length > 0 && timelineTopline && timelineHeading && timelineDescription && timelineList) {
-  const timelineData = [
-    {
-      topline: 'Week 1 foundation',
-      heading: 'Strategy Sprint',
-      description: 'We align on goals, audience, offer positioning, sitemap priorities, and the conversion actions your website needs to drive.',
-      items: [
-        'Kickoff workshop with clear success metrics',
-        'Messaging and page-priority recommendations',
-        'Action plan that removes guesswork before design starts'
-      ]
-    },
-    {
-      topline: 'Week 2 clarity',
-      heading: 'Design Direction',
-      description: 'We turn strategy into a visual route that feels premium, on-brand, and intentionally structured around your sales journey.',
-      items: [
-        'Homepage direction and core section hierarchy',
-        'Visual system for typography, colour, and trust cues',
-        'Fast review loop so approvals keep momentum high'
-      ]
-    },
-    {
-      topline: 'Week 3 execution',
-      heading: 'Build & Refine',
-      description: 'Approved designs become a responsive site with polished interactions, strong performance, and iterative refinements before launch.',
-      items: [
-        'Development across mobile, tablet, and desktop breakpoints',
-        'Content, forms, and conversion touchpoints wired in',
-        'QA pass covering speed, accessibility, and usability'
-      ]
-    },
-    {
-      topline: 'Week 4 momentum',
-      heading: 'Launch & Learn',
-      description: 'We ship confidently, monitor early behaviour, and use real insights to sharpen the site once it is live.',
-      items: [
-        'Launch support and final preflight checklist',
-        'Analytics and key journey checks after go-live',
-        'Next-step recommendations based on early user signals'
-      ]
-    }
-  ];
-
-  const updateTimeline = (index) => {
-    const data = timelineData[index];
-
-    timelineSteps.forEach((step, stepIndex) => {
-      const isActive = stepIndex === index;
-      step.classList.toggle('is-active', isActive);
-      step.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-
-    timelineTopline.textContent = data.topline;
-    timelineHeading.textContent = data.heading;
-    timelineDescription.textContent = data.description;
-    timelineList.innerHTML = data.items.map(item => `<li>${item}</li>`).join('');
-
-    Array.from(timelineList.children).forEach((item, itemIndex) => {
-      item.classList.add('reveal', 'visible');
-      item.style.transitionDelay = `${itemIndex * 80}ms`;
-    });
-  };
-
-  timelineSteps.forEach((step, index) => {
-    step.addEventListener('click', () => updateTimeline(index));
-  });
-}
-
-// ===== Scrollspy navigation =====
-const sections = document.querySelectorAll('section[id]');
-const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
-
-if (sections.length > 0 && navAnchors.length > 0) {
-  const setActiveLink = () => {
-    const scrollPosition = window.scrollY + 140;
-    let currentId = '';
-
-    sections.forEach(section => {
-      if (scrollPosition >= section.offsetTop) {
-        currentId = section.id;
-      }
-    });
-
-    navAnchors.forEach(link => {
-      const matches = link.getAttribute('href') === `#${currentId}`;
-      link.classList.toggle('is-current', matches);
-    });
-  };
-
-  setActiveLink();
-  window.addEventListener('scroll', setActiveLink);
-}
-
-// ===== Floating CTA visibility =====
-const floatingCta = document.getElementById('floatingCta');
-if (floatingCta) {
-  const toggleFloatingCta = () => {
-    const shouldShow = window.scrollY > 520;
-    floatingCta.classList.toggle('is-visible', shouldShow);
-  };
-
-  toggleFloatingCta();
-  window.addEventListener('scroll', toggleFloatingCta);
-}
 
 // ===== Contact form feedback =====
 const form = document.getElementById('contactForm');
