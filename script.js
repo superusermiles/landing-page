@@ -125,57 +125,88 @@ if (testimonialSlides.length) {
   testimonialSlider?.addEventListener('focusout', startTestimonialAutoplay);
 }
 
-// ===== Before / After estimator =====
-const estimatorRange = document.getElementById('estimatorRange');
-const estimatorValue = document.getElementById('estimatorValue');
-const estimatorDelta = document.getElementById('estimatorDelta');
-const estimatorMonths = document.querySelectorAll('.estimator-month');
-const estimatorRevenueBar = document.getElementById('estimatorRevenueBar');
-const estimatorLeadsBar = document.getElementById('estimatorLeadsBar');
-const estimatorRevenueCaption = document.getElementById('estimatorRevenueCaption');
-const estimatorLeadsCaption = document.getElementById('estimatorLeadsCaption');
+// ===== Results timeline =====
+const timelineSteps = document.querySelectorAll('.timeline-step');
+const timelineTopline = document.getElementById('timelineTopline');
+const timelineHeading = document.getElementById('timelineHeading');
+const timelineDescription = document.getElementById('timelineDescription');
+const timelineList = document.getElementById('timelineList');
 
-if (estimatorRange && estimatorValue && estimatorDelta && estimatorMonths.length) {
-  const formatCurrency = (value) => `$${Math.round(value).toLocaleString()}`;
-  const formatLeads = (value) => `${Math.round(value).toLocaleString()} leads`;
+if (timelineSteps.length && timelineTopline && timelineHeading && timelineDescription && timelineList) {
+  const timelineData = [
+    {
+      topline: 'Week 1 foundation',
+      heading: 'Strategy Sprint',
+      description: 'We align on goals, audience, offer positioning, sitemap priorities, and the conversion actions your website needs to drive.',
+      items: [
+        'Kickoff workshop with clear success metrics',
+        'Messaging and page-priority recommendations',
+        'Action plan that removes guesswork before design starts'
+      ]
+    },
+    {
+      topline: 'Week 2 clarity',
+      heading: 'Design Direction',
+      description: 'We shape the homepage and key journeys into a polished direction so you can see how the site will look, feel, and convert before development begins.',
+      items: [
+        'High-impact homepage direction and visual system',
+        'Fast feedback checkpoints to keep approvals moving',
+        'Clear handoff into build with no ambiguity'
+      ]
+    },
+    {
+      topline: 'Week 3 momentum',
+      heading: 'Build & Refine',
+      description: 'Approved designs become a fast, responsive experience with content refinement, QA passes, and the kind of polish that makes the launch feel premium.',
+      items: [
+        'Responsive front-end build across key breakpoints',
+        'Performance, accessibility, and conversion-focused QA',
+        'Final refinements based on stakeholder review'
+      ]
+    },
+    {
+      topline: 'Week 4 rollout',
+      heading: 'Launch & Learn',
+      description: 'We launch with tracking, final checks, and a practical plan for what to improve next so the website keeps performing after go-live.',
+      items: [
+        'Launch support with analytics and conversion tracking',
+        'Post-launch check-in to review early signals',
+        'Prioritized next-step recommendations for growth'
+      ]
+    }
+  ];
 
-  const updateEstimator = (value) => {
-    const monthlyBudget = Number(value);
-    const beforeRevenue = monthlyBudget * 4.2;
-    const afterRevenue = monthlyBudget * 6.4;
-    const beforeLeads = monthlyBudget / 120;
-    const afterLeads = monthlyBudget / 82;
-    const lift = ((afterRevenue - beforeRevenue) / beforeRevenue) * 100;
+  const updateTimeline = (index) => {
+    const activeIndex = Number(index);
+    const data = timelineData[activeIndex];
+    if (!data) return;
 
-    estimatorValue.textContent = formatCurrency(monthlyBudget);
-    estimatorDelta.textContent = `Projected +${Math.round(lift)}% revenue lift`;
-    estimatorRevenueBar.style.setProperty('--before', `${beforeRevenue}`);
-    estimatorRevenueBar.style.setProperty('--after', `${afterRevenue}`);
-    estimatorLeadsBar.style.setProperty('--before', `${beforeLeads}`);
-    estimatorLeadsBar.style.setProperty('--after', `${afterLeads}`);
-    estimatorRevenueCaption.textContent = `${formatCurrency(beforeRevenue)} → ${formatCurrency(afterRevenue)} projected monthly revenue`;
-    estimatorLeadsCaption.textContent = `${formatLeads(beforeLeads)} → ${formatLeads(afterLeads)} qualified enquiries`;
-
-    estimatorMonths.forEach((month, index) => {
-      const growth = 1 + ((index + 1) * 0.08);
-      const projectedRevenue = beforeRevenue * growth;
-      month.querySelector('.estimator-month-value').textContent = formatCurrency(projectedRevenue);
+    timelineSteps.forEach((step, stepIndex) => {
+      const isActive = stepIndex === activeIndex;
+      step.classList.toggle('is-active', isActive);
+      step.setAttribute('aria-pressed', String(isActive));
     });
+
+    timelineTopline.textContent = data.topline;
+    timelineHeading.textContent = data.heading;
+    timelineDescription.textContent = data.description;
+    timelineList.innerHTML = data.items.map(item => `<li>${item}</li>`).join('');
   };
 
-  updateEstimator(estimatorRange.value);
-  estimatorRange.addEventListener('input', (event) => updateEstimator(event.target.value));
+  timelineSteps.forEach((step, index) => {
+    step.addEventListener('click', () => updateTimeline(index));
+  });
 }
 
 // ===== Scroll-triggered reveal animations =====
 const revealElements = document.querySelectorAll(
-  '.service-card, .portfolio-card, .testimonial-card, .testimonial-slide, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .testimonials-shell, .results-shell, .cta-band, .outcome-estimator-shell'
+  '.service-card, .portfolio-card, .testimonial-card, .testimonial-slide, .hero-stats .stat, .about-content, .about-visual, .contact-form, .contact-info, .section-title, .section-tag, .section-sub, .process-card, .process-spotlight, .comparison-card, .comparison-divider, .testimonials-shell, .results-shell, .cta-band'
 );
 
 revealElements.forEach(el => {
   el.classList.add('reveal');
   const parent = el.parentElement;
-  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('testimonial-slider') || parent.classList.contains('estimator-months'))) {
+  if (parent && (parent.classList.contains('services-grid') || parent.classList.contains('portfolio-grid') || parent.classList.contains('testimonials-grid') || parent.classList.contains('hero-stats') || parent.classList.contains('process-grid') || parent.classList.contains('comparison-grid') || parent.classList.contains('testimonial-slider') || parent.classList.contains('timeline'))) {
     const siblings = Array.from(parent.children);
     el.style.transitionDelay = `${siblings.indexOf(el) * 80}ms`;
   }
@@ -224,6 +255,18 @@ const statObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 statNums.forEach(el => statObserver.observe(el));
+
+// ===== Floating CTA visibility =====
+const floatingCta = document.getElementById('floatingCta');
+if (floatingCta) {
+  const toggleFloatingCta = () => {
+    const shouldShow = window.scrollY > 500;
+    floatingCta.classList.toggle('is-visible', shouldShow);
+  };
+
+  toggleFloatingCta();
+  window.addEventListener('scroll', toggleFloatingCta);
+}
 
 // ===== Contact form feedback =====
 const form = document.getElementById('contactForm');
